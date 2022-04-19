@@ -1,0 +1,30 @@
+stages:
+  - docker
+  - post
+
+include:
+  - project: devops/pipes
+    file: /templates/docker-build-dockerhub.gitlab-ci.yml
+
+  - project: devops/pipes
+    file: /templates/update-docker-hub-readme.gitlab-ci.yml
+
+variables:
+  DOCKERFILE_CONTEXT: .
+  DOCKER_IMAGE_NAME: cenk1cenk2/openresty
+  IMAGE_TAGS: latest
+  README_DESCRIPTION: |
+    OpenResty image for personal use-case.
+
+build-docker-image:
+  only:
+    refs:
+      - schedules
+      - main
+      - tags
+
+update-docker-hub-readme:
+  only:
+    refs:
+      - main
+      - tags
