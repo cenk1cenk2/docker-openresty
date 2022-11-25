@@ -2,29 +2,50 @@ stages:
   - docker
   - post
 
+variables:
+  DOCKER_IMAGE_NAME: cenk1cenk2/openresty
+
 include:
   - project: devops/pipes
-    file: /templates/docker-build-dockerhub.gitlab-ci.yml
+    file: /templates/v2/docker-build-dockerhub.gitlab-ci.yml
 
   - project: devops/pipes
-    file: /templates/update-docker-hub-readme.gitlab-ci.yml
+    file: /templates/v2/docker-manifest-dockerhub.gitlab-ci.yml
 
-variables:
-  DOCKERFILE_CONTEXT: .
-  DOCKER_IMAGE_NAME: cenk1cenk2/openresty
-  IMAGE_TAGS: latest
-  README_DESCRIPTION: |
-    OpenResty image for personal use-case.
+  - project: devops/pipes
+    file: /templates/v2/update-docker-hub-readme.gitlab-ci.yml
 
-build-docker-image:
+docker-build:
+  stage: docker
+  extends: .docker-build-dockerhub
+  parallel:
+    matrix:
+      - DOCKERFILE_NAME: Dockerfile
+        DOCKER_IMAGE_TAGS: latest-${GITLAB_CI_ARCH}
+        DOCKER_MANIFEST_TARGET: latest
+        GITLAB_CI_ARCH:
+          - amd64
+          - arm64
   only:
     refs:
       - schedules
       - main
-      - tags
 
-update-docker-hub-readme:
+docker-manifest:
+  stage: post
+  extends: .docker-manifest-dockerhub
   only:
     refs:
+      - schedules
       - main
-      - tags
+
+update-docker-hub-readme:
+  stage: post
+  extends: .update-docker-hub-readme
+  variables:
+    README_DESCRIPTION: |
+      OpenResty image for personal use-case.
+  only:
+    refs:
+      - schedules
+      - main
