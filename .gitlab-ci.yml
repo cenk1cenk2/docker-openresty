@@ -28,7 +28,7 @@ docker-build:
     matrix:
       - DOCKERFILE_NAME: Dockerfile
         DOCKER_IMAGE_TAGS: latest-${GITLAB_CI_ARCH},${RESTY_IMAGE_TAG}-${RESTY_VERSION}-${GITLAB_CI_ARCH}
-        DOCKER_MANIFEST_TARGET: latest,${RESTY_IMAGE_TAG}-${RESTY_VERSION}
+        DOCKER_MANIFEST_TARGET: latest
         GITLAB_CI_ARCH:
           - amd64
           - arm64
