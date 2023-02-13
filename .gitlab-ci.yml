@@ -19,14 +19,16 @@ docker-build:
   stage: docker
   extends: .docker-build-dockerhub
   variables:
+    RESTY_VERSION: 1.21.4.1
+    RESTY_IMAGE_TAG: 3.16
     DOCKER_IMAGE_BUILD_ARGS: |-
-      RESTY_VERSION=1.21.4.1,
-      RESTY_IMAGE_TAG=3.16
+      RESTY_VERSION={{ .RESTY_VERSION }},
+      RESTY_IMAGE_TAG={{ .RESTY_IMAGE_TAG }}
   parallel:
     matrix:
       - DOCKERFILE_NAME: Dockerfile
-        DOCKER_IMAGE_TAGS: latest-${GITLAB_CI_ARCH}
-        DOCKER_MANIFEST_TARGET: latest
+        DOCKER_IMAGE_TAGS: latest-{{ .GITLAB_CI_ARCH }},alpine-{{ .RESTY_IMAGE_TAG }}-{{ .RESTY_VERSION }}-{{ .GITLAB_CI_ARCH }}
+        DOCKER_MANIFEST_TARGET: latest,alpine-{{ .RESTY_IMAGE_TAG }}-{{ .RESTY_VERSION }}
         GITLAB_CI_ARCH:
           - amd64
           - arm64
