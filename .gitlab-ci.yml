@@ -19,7 +19,9 @@ docker-build:
   stage: docker
   extends: .docker-build-dockerhub
   variables:
-    DOCKER_IMAGE_BUILD_ARGS: RESTY_EVAL_PRE_CONFIGURE='apk add --no-cache --no-progress libmaxminddb && git clone https://github.com/leev/ngx_http_geoip2_module.git',RESTY_CONFIG_OPTIONS_MORE='--add-dynamic-module /tmp/ngx_http_geoip2_module'
+    DOCKER_IMAGE_BUILD_ARGS: |-
+      RESTY_EVAL_PRE_CONFIGURE='apk add --no-cache --no-progress libmaxminddb; git clone https://github.com/leev/ngx_http_geoip2_module.git',
+      RESTY_CONFIG_OPTIONS_MORE='--add-dynamic-module ngx_http_geoip2_module'
   parallel:
     matrix:
       - DOCKERFILE_NAME: Dockerfile
