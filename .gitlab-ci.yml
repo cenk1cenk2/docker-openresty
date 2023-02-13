@@ -19,8 +19,8 @@ docker-build:
   stage: docker
   extends: .docker-build-dockerhub
   variables:
-    RESTY_VERSION: 1.21.4.1
-    RESTY_IMAGE_TAG: 3.16
+    RESTY_VERSION: '1.21.4.1'
+    RESTY_IMAGE_TAG: '3.16'
     DOCKER_IMAGE_BUILD_ARGS: |-
       RESTY_VERSION={{ .RESTY_VERSION }},
       RESTY_IMAGE_TAG={{ .RESTY_IMAGE_TAG }}
