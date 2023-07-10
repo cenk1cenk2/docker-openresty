@@ -215,7 +215,8 @@ RUN apk add --no-cache --virtual .build-deps \
   && apk add --no-cache --virtual .gettext gettext \
   && mv /usr/bin/envsubst /tmp/ \
   && apk del .build-deps .gettext \
-  && mv /tmp/envsubst /usr/local/bin/
+  && mv /tmp/envsubst /usr/local/bin/ \
+  && mkdir -p /var/cache/nginx
 
 # Add LuaRocks paths
 # If OpenResty changes, these may need updating:
